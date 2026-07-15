@@ -1,26 +1,144 @@
 @import "tailwindcss";
 
+/* Base colors and utilities */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
+  --primary: #0284c7;
+  --primary-hover: #0369a1;
+  --secondary: #64748b;
+  --accent: #0d9488;
+  --border: #e2e8f0;
+  --card: #f8fafc;
+  --glow-color: rgba(2, 132, 199, 0.08);
+  --selection: rgba(2, 132, 199, 0.15);
+}
+
+:root.dark, :root[data-theme="dark"] {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --primary: #38bdf8;
+  --primary-hover: #0ea5e9;
+  --secondary: #94a3b8;
+  --accent: #34d399;
+  --border: #1e293b;
+  --card: #1e293b80;
+  --glow-color: rgba(56, 189, 248, 0.15);
+  --selection: rgba(56, 189, 248, 0.3);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-card: var(--card);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
+::selection {
+  background-color: var(--selection);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Typography styles */
+html, body {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom glow utility effects */
+.glow-card {
+  box-shadow: 0 4px 30px var(--glow-color);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  background-color: var(--card);
+}
+
+.glow-text {
+  text-shadow: 0 0 12px var(--glow-color);
+}
+
+.glow-border {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px var(--glow-color);
+}
+
+.glow-border-hover:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px var(--glow-color);
+  transition: all 0.3s ease;
+}
+
+/* Retro CRT monitor details */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  z-index: 10;
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+}
+
+@keyframes crt-flicker {
+  0% { opacity: 0.99; }
+  50% { opacity: 1; }
+  100% { opacity: 0.985; }
+}
+
+.crt-flicker {
+  animation: crt-flicker 0.15s infinite;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Custom animations */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
 }
